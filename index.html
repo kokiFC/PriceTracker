@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Data Visualization</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.x/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.x/dist/chartjs-adapter-luxon.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Price Data Visualization</h1>
+        <div class="controls">
+            <label for="productFilter">Filter by Product:</label>
+            <select id="productFilter"></select>
+        </div>
+        <canvas id="priceChart"></canvas>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

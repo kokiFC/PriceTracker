@@ -1,0 +1,50 @@
+serve . to start the server. ctr + c to stop.
+
+
+To track a new product's price, you will primarily interact with the `products.csv` file. No changes to the `get_dynamic_price.py` code will be necessary for adding new products, as the script is designed to read from this CSV.
+
+Here are the steps:
+
+1. __Open `products.csv`:__ Locate and open the `products.csv` file in your current working directory.
+
+2. __Add a new row for your product:__ Each row in this CSV represents a product to track. You need to add a new row with four columns:
+
+   - __`product_name`__: A descriptive name for your product (e.g., "New Gadget", "Gold Coin").
+
+   - __`url`__: The full URL of the product page you want to track.
+
+   - __`selector`__: This is a CSS selector that tells the script where to find the price on the product page. This is the most crucial part.
+
+   - __`type`__: This indicates whether the website uses static or dynamic content loading for the price.
+
+     - Use `static` if the price is directly available in the initial HTML source code of the page (most common for simple sites).
+     - Use `dynamic` if the price loads after the page has fully rendered, often via JavaScript (e.g., on e-commerce sites that load prices asynchronously).
+
+3. __How to find the `selector`:__
+
+   - __Open the product page in your web browser.__
+   - __Right-click on the price__ you want to track and select "Inspect" or "Inspect Element" (this opens your browser's developer tools).
+   - In the developer tools, the HTML element corresponding to the price will be highlighted. Look for attributes like `id`, `class`, or other unique identifiers.
+   - __Example 1 (using a class):__ If you see something like `<span class="product-price">123.45 USD</span>`, your selector could be `.product-price`.
+   - __Example 2 (using an ID):__ If you see `<div id="current-price">99.99 EUR</div>`, your selector could be `#current-price`.
+   - __Example 3 (more complex, combining classes):__ If you see `<span class="price-value current-offer">549 лв.</span>`, your selector could be `.price-value.current-offer`.
+   - __Test your selector:__ In the browser's developer console (usually accessible via the "Console" tab in developer tools), you can test your selector. For example, type `document.querySelector('.product-price').innerText` and press Enter. If it returns the price, your selector is likely correct.
+
+4. __Save `products.csv`:__ After adding the new row, save the `products.csv` file.
+
+5. __Run the script:__ Open your terminal in the `PriceTracker` directory and run the Python script:
+
+   ```bash
+   python get_dynamic_price.py
+   ```
+
+   The script will then fetch the prices for all products listed in `products.csv` (including your new one) and append the latest data to `price_data.csv`.
+
+__Example `products.csv` entry for a new product:__
+
+```csv
+product_name,url,selector,type
+New Product Name,https://www.example.com/new-product,.price-display,static
+```
+
+By following these steps, you can easily extend the price tracking functionality without modifying the core Python script.

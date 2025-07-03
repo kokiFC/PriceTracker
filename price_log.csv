@@ -1,0 +1,103 @@
+timestamp,product_name,price
+2025-06-28 17:14:52,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:14:54,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:15:21,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:15:23,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:15:42,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:15:44,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:18:15,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:18:17,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:18:55,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:18:57,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:19:19,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:19:21,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:21:16,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:21:18,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:29:23,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:29:25,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:31:32,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:31:34,Boox Go Color 7,Unknown type 'None'
+2025-06-28 17:42:45,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:43:10,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:43:12,Boox Go Color 7,Element not found
+2025-06-28 17:44:16,100g Valcambi Gold Bar,Element not found
+2025-06-28 17:44:18,Boox Go Color 7,Element not found
+2025-06-28 17:48:36,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:48:38,Boox Go Color 7,Element not found
+2025-06-28 17:49:11,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:51:51,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:53:05,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:53:47,Boox Go Color 7,"Error (dynamic): Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff7d2d8cda5+78885]
+	GetHandleVerifier [0x0x7ff7d2d8ce00+78976]
+	(No symbol) [0x0x7ff7d2b49bca]
+	(No symbol) [0x0x7ff7d2ba0766]
+	(No symbol) [0x0x7ff7d2ba0a1c]
+	(No symbol) [0x0x7ff7d2bf4467]
+	(No symbol) [0x0x7ff7d2bc8bcf]
+	(No symbol) [0x0x7ff7d2bf122f]
+	(No symbol) [0x0x7ff7d2bc8963]
+	(No symbol) [0x0x7ff7d2b916b1]
+	(No symbol) [0x0x7ff7d2b92443]
+	GetHandleVerifier [0x0x7ff7d3064eed+3061101]
+	GetHandleVerifier [0x0x7ff7d305f33d+3037629]
+	GetHandleVerifier [0x0x7ff7d307e592+3165202]
+	GetHandleVerifier [0x0x7ff7d2da730e+186766]
+	GetHandleVerifier [0x0x7ff7d2daeb3f+217535]
+	GetHandleVerifier [0x0x7ff7d2d959b4+114740]
+	GetHandleVerifier [0x0x7ff7d2d95b69+115177]
+	GetHandleVerifier [0x0x7ff7d2d7c368+10728]
+	BaseThreadInitThunk [0x0x7ffc92537374+20]
+	RtlUserThreadStart [0x0x7ffc9301cc91+33]
+"
+2025-06-28 17:54:07,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:54:45,Boox Go Color 7,"Error (dynamic): Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff7d2d8cda5+78885]
+	GetHandleVerifier [0x0x7ff7d2d8ce00+78976]
+	(No symbol) [0x0x7ff7d2b49bca]
+	(No symbol) [0x0x7ff7d2ba0766]
+	(No symbol) [0x0x7ff7d2ba0a1c]
+	(No symbol) [0x0x7ff7d2bf4467]
+	(No symbol) [0x0x7ff7d2bc8bcf]
+	(No symbol) [0x0x7ff7d2bf122f]
+	(No symbol) [0x0x7ff7d2bc8963]
+	(No symbol) [0x0x7ff7d2b916b1]
+	(No symbol) [0x0x7ff7d2b92443]
+	GetHandleVerifier [0x0x7ff7d3064eed+3061101]
+	GetHandleVerifier [0x0x7ff7d305f33d+3037629]
+	GetHandleVerifier [0x0x7ff7d307e592+3165202]
+	GetHandleVerifier [0x0x7ff7d2da730e+186766]
+	GetHandleVerifier [0x0x7ff7d2daeb3f+217535]
+	GetHandleVerifier [0x0x7ff7d2d959b4+114740]
+	GetHandleVerifier [0x0x7ff7d2d95b69+115177]
+	GetHandleVerifier [0x0x7ff7d2d7c368+10728]
+	BaseThreadInitThunk [0x0x7ffc92537374+20]
+	RtlUserThreadStart [0x0x7ffc9301cc91+33]
+"
+2025-06-28 17:55:00,100g Valcambi Gold Bar,"17954,00 BGN"
+2025-06-28 17:55:38,Boox Go Color 7,"Error (dynamic): Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff7d2d8cda5+78885]
+	GetHandleVerifier [0x0x7ff7d2d8ce00+78976]
+	(No symbol) [0x0x7ff7d2b49bca]
+	(No symbol) [0x0x7ff7d2ba0766]
+	(No symbol) [0x0x7ff7d2ba0a1c]
+	(No symbol) [0x0x7ff7d2bf4467]
+	(No symbol) [0x0x7ff7d2bc8bcf]
+	(No symbol) [0x0x7ff7d2bf122f]
+	(No symbol) [0x0x7ff7d2bc8963]
+	(No symbol) [0x0x7ff7d2b916b1]
+	(No symbol) [0x0x7ff7d2b92443]
+	GetHandleVerifier [0x0x7ff7d3064eed+3061101]
+	GetHandleVerifier [0x0x7ff7d305f33d+3037629]
+	GetHandleVerifier [0x0x7ff7d307e592+3165202]
+	GetHandleVerifier [0x0x7ff7d2da730e+186766]
+	GetHandleVerifier [0x0x7ff7d2daeb3f+217535]
+	GetHandleVerifier [0x0x7ff7d2d959b4+114740]
+	GetHandleVerifier [0x0x7ff7d2d95b69+115177]
+	GetHandleVerifier [0x0x7ff7d2d7c368+10728]
+	BaseThreadInitThunk [0x0x7ffc92537374+20]
+	RtlUserThreadStart [0x0x7ffc9301cc91+33]
+"

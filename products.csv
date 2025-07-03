@@ -1,0 +1,5 @@
+product_name,url,selector,type
+100g Valcambi Gold Bar,https://tavex.bg/en/gold/100g-valcambi-gold-bar/,.product-poster__price-value.js-product-price-from,static
+Boox Go Color 7,https://www.citytel.bg/elektronen-chetec-boox-go-color-7-gen-2-black,.price,static
+50g Valcambi Gold Bar, https://tavex.bg/en/gold/50g-valcambi-gold-bar/,.product-poster__price-value.js-product-price-from,static
+1 oz Valcambi Gold Bars, https://tavex.bg/en/gold/1oz-gold-bar-valcambi/,.product-poster__price-value.js-product-price-from,static

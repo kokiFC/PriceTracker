@@ -3,7 +3,7 @@ name: Price Scraper
 on:
   schedule:
     # Runs every day at 00:00 UTC
-    - cron: '17 0 * * *'
+    - cron: '0 17 * * *'
   workflow_dispatch: # Allows manual triggering
 
 jobs:

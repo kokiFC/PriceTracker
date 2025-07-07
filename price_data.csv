@@ -27,7 +27,34 @@ date,product,price
 2025-07-03 19:44:21,Boox Go Color 7,549
 2025-07-03 19:44:25,50g Valcambi Gold Bar,9192.00
 2025-07-03 19:44:28,1 oz Valcambi Gold Bars,5723.00
+<<<<<<< HEAD
 2025-07-04 17:03:24,100g Valcambi Gold Bar,18202.00
 2025-07-04 17:03:28,Boox Go Color 7,549
 2025-07-04 17:03:32,50g Valcambi Gold Bar,9191.00
 2025-07-04 17:03:36,1 oz Valcambi Gold Bars,5723.00
+=======
+2025-07-03 17:43:25,100g Valcambi Gold Bar,18212.00
+2025-07-03 17:43:31,Boox Go Color 7,549
+2025-07-03 17:43:35,50g Valcambi Gold Bar,9196.00
+2025-07-03 17:43:39,1 oz Valcambi Gold Bars,5726.00
+2025-07-04 02:21:55,100g Valcambi Gold Bar,18190.00
+2025-07-04 02:21:59,Boox Go Color 7,549
+2025-07-04 02:22:04,50g Valcambi Gold Bar,9184.00
+2025-07-04 02:22:07,1 oz Valcambi Gold Bars,5719.00
+2025-07-04 17:03:24,100g Valcambi Gold Bar,18202.00
+2025-07-04 17:03:28,Boox Go Color 7,549
+2025-07-04 17:03:32,50g Valcambi Gold Bar,9191.00
+2025-07-04 17:03:36,1 oz Valcambi Gold Bars,5723.00
+2025-07-05 17:20:13,100g Valcambi Gold Bar,18202.00
+2025-07-05 17:20:18,Boox Go Color 7,549
+2025-07-05 17:20:22,50g Valcambi Gold Bar,9191.00
+2025-07-05 17:20:26,1 oz Valcambi Gold Bars,5722.00
+2025-07-06 17:19:53,100g Valcambi Gold Bar,18202.00
+2025-07-06 17:19:57,Boox Go Color 7,549
+2025-07-06 17:20:01,50g Valcambi Gold Bar,9191.00
+2025-07-06 17:20:05,1 oz Valcambi Gold Bars,5722.00
+2025-07-07 17:21:17,100g Valcambi Gold Bar,18288.00
+2025-07-07 17:21:21,Boox Go Color 7,549
+2025-07-07 17:21:25,50g Valcambi Gold Bar,9234.00
+2025-07-07 17:21:28,1 oz Valcambi Gold Bars,5749.00
+>>>>>>> f501286f8987bfa85dae1640ef5d2acd1a7a6c7b

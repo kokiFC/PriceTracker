@@ -47,14 +47,55 @@ def scrape_dynamic_price(url, selector):
     driver = webdriver.Chrome(options=chrome_options)
     
     try:
+        print("Before driver.get(url)")
         driver.get(url)
-        # Wait up to 30 seconds for the price element to become visible
-        wait = WebDriverWait(driver, 30)
-        price_element = wait.until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, selector))
-        )
-        return price_element.text.strip()
-    except Exception as e:
+        wait = WebDriverWait(driver, 60)
+
+        # Try to click the cookie consent button if it appears
+        try:
+            print("After driver.get(url), before cookie handling")
+            # Check if the cookie button exists
+            cookie_buttons = driver.find_elements(By.XPATH, "//button[text()='Съгласен съм с бисквитките']")
+            if cookie_buttons:
+                cookie_button = cookie_buttons[0]
+                print("Cookie button found.")
+
+                try:
+                    cookie_button.click()
+                    print("Clicked cookie consent button.")
+                except Exception as e:
+                    print(f"Error clicking cookie button: {e}")
+
+                try:
+                    # Wait for the cookie banner to disappear
+                    wait.until(EC.invisibility_of_element_located((By.XPATH, "//div[contains(@class, 'cookie-consent-banner')]")))
+                    print("Cookie banner disappeared.")
+                except Exception as e:
+                    print(f"Error waiting for cookie banner to disappear: {e}")
+            else:
+                print("Cookie button not found, proceeding without clicking.")
+        except Exception as e:
+            print(f"Cookie consent handling failed: {e}, proceeding without clicking.")
+
+            try:
+                price_element = driver.find_element(By.CSS_SELECTOR, selector)
+                print("Price element found using find_element")
+                price_text = price_element.text.strip()
+                print(f"Price text: {price_text}")
+                return price_text
+            except Exception as e:
+                print(f"Error getting price text: {e}")
+                print(f"Page source: {driver.page_source}")
+                return "Price element not found"
+        except Exception as e:
+            print(f"Error (dynamic): {e}")
+        page_source = driver.page_source
+        try:
+            page_source = page_source.encode('windows-1251').decode('utf-8')
+        except:
+            print("Could not decode page source")
+        print(f"Page source: {page_source}")
+        e = None # Initialize e to None
         return f"Error (dynamic): {e}"
     finally:
         driver.quit()
@@ -65,12 +106,14 @@ def clean_price(price_str):
     """Cleans the price string by removing currency symbols and standardizing decimal separators."""
     if not price_str:
         return price_str
+    print(f"Price before cleaning: {price_str}")
     # Remove currency symbols and non-numeric characters except comma and dot
     cleaned = price_str.replace('лв.', '').replace('BGN', '').strip()
     # Replace comma with dot for decimal separation
     cleaned = cleaned.replace(',', '.')
     # Remove any remaining non-numeric characters except the dot
     cleaned = ''.join(c for c in cleaned if c.isdigit() or c == '.')
+    print(f"Price after cleaning: {cleaned}")
     return cleaned
 
 def log_price(timestamp, product_name, price):
@@ -108,6 +151,7 @@ def main():
             if scrape_type == 'static':
                 price = scrape_static_price(url, selector)
             elif scrape_type == 'dynamic':
+                print("scrape_type is dynamic, calling scrape_dynamic_price")
                 price = scrape_dynamic_price(url, selector)
             else:
                 price = f"Unknown type '{scrape_type}'"

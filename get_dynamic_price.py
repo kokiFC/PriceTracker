@@ -48,12 +48,36 @@ def scrape_dynamic_price(url, selector):
     
     try:
         driver.get(url)
+        # Try to accept cookies if the consent pop-up appears
+        try:
+            accept_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Приемам')]"))
+            )
+            accept_button.click()
+            time.sleep(2) # Give some time for the cookie banner to disappear
+        except:
+            pass # No cookie banner or already accepted
+
         # Wait up to 30 seconds for the price element to become visible
         wait = WebDriverWait(driver, 30)
         price_element = wait.until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, selector))
         )
-        return price_element.text.strip()
+        
+        # After the element is visible, wait for its text content to not be empty
+        # This is a more robust way to handle dynamically loaded text
+        price_text = ""
+        # Wait for up to 10 seconds for text content to appear, checking every 0.5 seconds
+        for _ in range(int(10 / 0.5)): # 20 retries over 10 seconds
+            price_text = driver.execute_script("return arguments[0].textContent;", price_element).strip()
+            if price_text:
+                break
+            time.sleep(0.5) # Small delay before retrying
+            
+        if price_text:
+            return price_text
+        else:
+            return "Price text not found after element visible"
     except Exception as e:
         return f"Error (dynamic): {e}"
     finally:

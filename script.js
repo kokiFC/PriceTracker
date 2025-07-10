@@ -13,140 +13,164 @@ document.addEventListener('DOMContentLoaded', () => {
                 return row;
             });
 
-    const products = [...new Set(data.map(item => item.product))];
-    const productFilter = document.getElementById('productFilter');
-    let priceChart; // Declare chart variable globally or in a scope accessible by updateChart
+            // Process data to get the last price for each product
+            const latestPrices = {};
+            data.forEach(item => {
+                const productName = item.product;
+                const itemDate = new Date(item.date);
 
-    // Populate the dropdown
-    const allOption = document.createElement('option');
-    allOption.value = 'all';
-    allOption.textContent = 'All Products';
-    productFilter.appendChild(allOption);
+                if (!latestPrices[productName] || itemDate > new Date(latestPrices[productName].date)) {
+                    latestPrices[productName] = {
+                        date: item.date,
+                        price: item.price
+                    };
+                }
+            });
 
-    products.forEach((product, index) => {
-        const option = document.createElement('option');
-        option.value = product;
-        option.textContent = product;
-        productFilter.appendChild(option);
-        if (index === 0) { // Select the first product by default
-            option.selected = true;
-        }
-    });
-
-    // Function to update the chart based on selected product
-    function updateChart(selectedProduct) {
-        let filteredData = data;
-        if (selectedProduct !== 'all') {
-            filteredData = data.filter(item => item.product === selectedProduct);
-        }
-
-        const currentProducts = [...new Set(filteredData.map(item => item.product))];
-        const datasets = currentProducts.map(product => {
-            const productData = filteredData.filter(item => item.product === product);
-            return {
-                label: product,
-                data: productData.map(item => ({
-                    x: new Date(item.date),
-                    y: parseFloat(item.price)
-                })),
-                borderColor: getRandomColor(),
-                fill: false
-            };
-        });
-
-        // Calculate min/max for Y-axis
-        const allPrices = filteredData.map(item => parseFloat(item.price));
-        const minPrice = Math.min(...allPrices);
-        let maxPrice = Math.max(...allPrices);
-
-        // Add a buffer for better visualization
-        let priceBuffer = (maxPrice - minPrice) * 0.1; // 10% buffer
-
-        // Handle cases where minPrice and maxPrice are the same (constant price)
-        if (minPrice === maxPrice) {
-            if (minPrice === 0) { // If price is 0, use a small positive buffer
-                priceBuffer = 0.1;
-            } else { // For non-zero constant prices, use a fixed buffer
-                priceBuffer = 1;
+            // Populate the product table
+            const productTableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            for (const product in latestPrices) {
+                const row = productTableBody.insertRow();
+                const nameCell = row.insertCell(0);
+                const priceCell = row.insertCell(1);
+                nameCell.textContent = product;
+                priceCell.textContent = parseFloat(latestPrices[product].price).toFixed(2); // Format price to 2 decimal places
             }
-        }
 
-        const yAxisMin = minPrice - priceBuffer;
-        const yAxisMax = maxPrice + priceBuffer;
+            const products = [...new Set(data.map(item => item.product))];
+            const productFilter = document.getElementById('productFilter');
+            let priceChart; // Declare chart variable globally or in a scope accessible by updateChart
 
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'minute',
-                        tooltipFormat: 'MMM D, YYYY HH:mm',
-                        displayFormats: {
-                            minute: 'HH:mm'
+            // Populate the dropdown
+            const allOption = document.createElement('option');
+            allOption.value = 'all';
+            allOption.textContent = 'All Products';
+            productFilter.appendChild(allOption);
+
+            products.forEach((product, index) => {
+                const option = document.createElement('option');
+                option.value = product;
+                option.textContent = product;
+                productFilter.appendChild(option);
+                if (index === 0) { // Select the first product by default
+                    option.selected = true;
+                }
+            });
+
+            // Function to update the chart based on selected product
+            function updateChart(selectedProduct) {
+                let filteredData = data;
+                if (selectedProduct !== 'all') {
+                    filteredData = data.filter(item => item.product === selectedProduct);
+                }
+
+                const currentProducts = [...new Set(filteredData.map(item => item.product))];
+                const datasets = currentProducts.map(product => {
+                    const productData = filteredData.filter(item => item.product === product);
+                    return {
+                        label: product,
+                        data: productData.map(item => ({
+                            x: new Date(item.date),
+                            y: parseFloat(item.price)
+                        })),
+                        borderColor: getRandomColor(),
+                        fill: false
+                    };
+                });
+
+                // Calculate min/max for Y-axis
+                const allPrices = filteredData.map(item => parseFloat(item.price));
+                const minPrice = Math.min(...allPrices);
+                let maxPrice = Math.max(...allPrices);
+
+                // Add a buffer for better visualization
+                let priceBuffer = (maxPrice - minPrice) * 0.1; // 10% buffer
+
+                // Handle cases where minPrice and maxPrice are the same (constant price)
+                if (minPrice === maxPrice) {
+                    if (minPrice === 0) { // If price is 0, use a small positive buffer
+                        priceBuffer = 0.1;
+                    } else { // For non-zero constant prices, use a fixed buffer
+                        priceBuffer = 1;
+                    }
+                }
+
+                const yAxisMin = minPrice - priceBuffer;
+                const yAxisMax = maxPrice + priceBuffer;
+
+                const chartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                tooltipFormat: 'MMM D, YYYY HH:mm',
+                                displayFormats: {
+                                    minute: 'HH:mm'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price'
+                            },
+                            min: yAxisMin,
+                            max: yAxisMax
                         }
                     },
-                    title: {
-                        display: true,
-                        text: 'Date'
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
                     }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Price'
-                    },
-                    min: yAxisMin,
-                    max: yAxisMax
-                }
-            },
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false
+                };
+
+                if (priceChart) {
+                    priceChart.data.datasets = datasets;
+                    priceChart.options = chartOptions; // Update options
+                    priceChart.update();
+                } else {
+                    const ctx = document.getElementById('priceChart').getContext('2d');
+                    priceChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: datasets
+                        },
+                        options: chartOptions
+                    });
                 }
             }
-        };
 
-        if (priceChart) {
-            priceChart.data.datasets = datasets;
-            priceChart.options = chartOptions; // Update options
-            priceChart.update();
-        } else {
-            const ctx = document.getElementById('priceChart').getContext('2d');
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: datasets
-                },
-                options: chartOptions
+            // Initial chart load: default to the first product if available, otherwise 'all'
+            if (products.length > 0) {
+                updateChart(products[0]);
+            } else {
+                updateChart('all');
+            }
+
+            // Add event listener for dropdown change
+            productFilter.addEventListener('change', (event) => {
+                updateChart(event.target.value);
             });
-        }
-    }
 
-    // Initial chart load: default to the first product if available, otherwise 'all'
-    if (products.length > 0) {
-        updateChart(products[0]);
-    } else {
-        updateChart('all');
-    }
-
-    // Add event listener for dropdown change
-    productFilter.addEventListener('change', (event) => {
-        updateChart(event.target.value);
-    });
-
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-})
-.catch(error => {
-    console.error('Error fetching or parsing CSV:', error);
-});
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching or parsing CSV:', error);
+        });
 });

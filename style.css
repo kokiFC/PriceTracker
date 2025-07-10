@@ -37,3 +37,39 @@ canvas {
     margin-right: 10px;
     font-size: 1em;
 }
+
+.product-table-container {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-table-container h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#productTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#productTable th, #productTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#productTable th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+#productTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#productTable tbody tr:hover {
+    background-color: #f1f1f1;
+}

@@ -48,15 +48,7 @@ def scrape_dynamic_price(url, selector):
     
     try:
         driver.get(url)
-        # Try to accept cookies if the consent pop-up appears
-        try:
-            accept_button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Приемам')]"))
-            )
-            accept_button.click()
-            time.sleep(2) # Give some time for the cookie banner to disappear
-        except:
-            pass # No cookie banner or already accepted
+        time.sleep(5) # Increased initial wait to allow all elements to load (without JS)
 
         # Wait up to 30 seconds for the price element to become visible
         wait = WebDriverWait(driver, 30)
@@ -67,8 +59,8 @@ def scrape_dynamic_price(url, selector):
         # After the element is visible, wait for its text content to not be empty
         # This is a more robust way to handle dynamically loaded text
         price_text = ""
-        # Wait for up to 10 seconds for text content to appear, checking every 0.5 seconds
-        for _ in range(int(10 / 0.5)): # 20 retries over 10 seconds
+        # Wait for up to 15 seconds for text content to appear, checking every 0.5 seconds
+        for _ in range(int(15 / 0.5)): # 30 retries over 15 seconds
             price_text = driver.execute_script("return arguments[0].textContent;", price_element).strip()
             if price_text:
                 break
@@ -77,7 +69,31 @@ def scrape_dynamic_price(url, selector):
         if price_text:
             return price_text
         else:
-            return "Price text not found after element visible"
+            # If price text is still empty, try a few common alternative selectors for ardes.bg
+            if "ardes.bg" in url:
+                print(f"Price text not found with '{selector}', trying alternative selectors for ardes.bg...")
+                alternative_selectors = [
+                    '.product-price-value', # Common price class
+                    '.price-value',
+                    'span.price',
+                    'div.price',
+                    'strong.price'
+                ]
+                for alt_selector in alternative_selectors:
+                    try:
+                        alt_price_element = wait.until(
+                            EC.visibility_of_element_located((By.CSS_SELECTOR, alt_selector))
+                        )
+                        alt_price_text = ""
+                        for _ in range(int(5 / 0.5)): # 10 retries over 5 seconds for alternative
+                            alt_price_text = driver.execute_script("return arguments[0].textContent;", alt_price_element).strip()
+                            if alt_price_text:
+                                print(f"Price found with alternative selector: '{alt_selector}'")
+                                return alt_price_text
+                            time.sleep(0.5)
+                    except:
+                        continue # Continue to next alternative if current one fails
+            return "Price text not found after element visible or with alternatives"
     except Exception as e:
         return f"Error (dynamic): {e}"
     finally:

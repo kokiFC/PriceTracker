@@ -29,12 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Populate the product table
             const productTableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+
+            // Function to validate price
+            function isValidPrice(price) {
+                const priceValue = parseFloat(price);
+                return !isNaN(priceValue) && priceValue.toString().length <= 10;
+            }
+
             for (const product in latestPrices) {
-                const row = productTableBody.insertRow();
-                const nameCell = row.insertCell(0);
-                const priceCell = row.insertCell(1);
-                nameCell.textContent = product;
-                priceCell.textContent = parseFloat(latestPrices[product].price).toFixed(2); // Format price to 2 decimal places
+                if (isValidPrice(latestPrices[product].price)) {
+                    const row = productTableBody.insertRow();
+                    const nameCell = row.insertCell(0);
+                    const priceCell = row.insertCell(1);
+                    nameCell.textContent = product;
+                    priceCell.textContent = parseFloat(latestPrices[product].price).toFixed(2); // Format price to 2 decimal places
+                }
             }
 
             const products = [...new Set(data.map(item => item.product))];

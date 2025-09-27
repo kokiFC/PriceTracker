@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return row;
             });
 
+            // Sort data by date to ensure the chart line is drawn correctly
+            data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
             // Process data to get the last price for each product
             const latestPrices = {};
             data.forEach(item => {
@@ -67,19 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Function to update the chart based on selected product
-            function updateChart(selectedProduct) {
-                let filteredData = data;
-                if (selectedProduct !== 'all') {
-                    filteredData = data.filter(item => item.product === selectedProduct);
-                }
+            function updateChart(selectedProduct = 'all') {
+                const filteredData = selectedProduct === 'all' ? data : data.filter(item => item.product === selectedProduct);
 
                 const currentProducts = [...new Set(filteredData.map(item => item.product))];
                 const datasets = currentProducts.map(product => {
-                    const productData = filteredData.filter(item => item.product === product);
+                    const productData = filteredData.filter(item => item.product === product)
+                        .filter(item => isValidPrice(item.price));
                     return {
                         label: product,
                         data: productData.map(item => ({
-                            x: new Date(item.date),
+                            x: luxon.DateTime.fromSQL(item.date).valueOf(),
                             y: parseFloat(item.price)
                         })),
                         borderColor: getRandomColor(),
@@ -88,9 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 // Calculate min/max for Y-axis
-                const allPrices = filteredData.map(item => parseFloat(item.price));
-                const minPrice = Math.min(...allPrices);
-                let maxPrice = Math.max(...allPrices);
+                const validPrices = filteredData.map(item => parseFloat(item.price)).filter(price => !isNaN(price) && price.toString().length <= 10);
+                let minPrice = 0;
+                let maxPrice = 1;
+
+                if (validPrices.length > 0) {
+                    minPrice = Math.min(...validPrices);
+                    maxPrice = Math.max(...validPrices);
+                }
 
                 // Add a buffer for better visualization
                 let priceBuffer = (maxPrice - minPrice) * 0.1; // 10% buffer
@@ -113,17 +119,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     scales: {
                         x: {
                             type: 'time',
-                            time: {
-                                unit: 'minute',
-                                tooltipFormat: 'MMM D, YYYY HH:mm',
-                                displayFormats: {
-                                    minute: 'HH:mm'
-                                }
-                            },
                             title: {
                                 display: true,
                                 text: 'Date'
+                            },
+                            time: {
+                            unit: 'day',
+                            stepSize: 7,
+                            tooltipFormat: 'MMM d, yyyy',
+                            displayFormats: {
+                                day: 'MMM d, yyyy'
                             }
+                        }
                         },
                         y: {
                             title: {
@@ -153,17 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         data: {
                             datasets: datasets
                         },
-                        options: chartOptions
+                        options: chartOptions // Include options here
                     });
                 }
             }
 
-            // Initial chart load: default to the first product if available, otherwise 'all'
-            if (products.length > 0) {
-                updateChart(products[0]);
-            } else {
-                updateChart('all');
-            }
+            // Initial chart load: default to the first product
+            const initialProduct = productFilter.value;
+            updateChart(initialProduct);
 
             // Add event listener for dropdown change
             productFilter.addEventListener('change', (event) => {

@@ -73,8 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
             function updateChart(selectedProduct = 'all') {
                 const filteredData = selectedProduct === 'all' ? data : data.filter(item => item.product === selectedProduct);
 
+                const colorPalette = [
+                    '#E6194B', '#3CB44B', '#FFE119', '#4363D8', '#F58231', '#911EB4',
+                    '#46F0F0', '#F032E6', '#BCF60C', '#FABEBE', '#008080', '#E6BEFF',
+                    '#9A6324', '#FFFAC8', '#800000', '#AAFFC3', '#808000', '#FFD8B1',
+                    '#000075', '#808080'
+                ];
+
                 const currentProducts = [...new Set(filteredData.map(item => item.product))];
-                const datasets = currentProducts.map(product => {
+                const datasets = currentProducts.map((product, index) => {
                     const productData = filteredData.filter(item => item.product === product)
                         .filter(item => isValidPrice(item.price));
                     return {
@@ -83,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             x: luxon.DateTime.fromSQL(item.date).valueOf(),
                             y: parseFloat(item.price)
                         })),
-                        borderColor: getRandomColor(),
+                        borderColor: colorPalette[index % colorPalette.length], // Cycle through the palette
                         fill: false
                     };
                 });
@@ -174,14 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateChart(event.target.value);
             });
 
-            function getRandomColor() {
-                const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
-            }
         })
         .catch(error => {
             console.error('Error fetching or parsing CSV:', error);

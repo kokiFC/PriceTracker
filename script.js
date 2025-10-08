@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetch('price_data.csv')
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
         .then(csvText => {
             const lines = csvText.trim().split('\n');
             const headers = lines[0].split(',');
@@ -13,10 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return row;
             });
 
-            // Sort data by date to ensure the chart line is drawn correctly
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // Process data to get the last price for each product
             const latestPrices = {};
             data.forEach(item => {
                 const productName = item.product;
@@ -30,10 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Populate the product table
             const productTableBody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
 
-            // Function to validate price
             function isValidPrice(price) {
                 const priceValue = parseFloat(price);
                 return !isNaN(priceValue) && priceValue.toString().length <= 10;
@@ -45,15 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const nameCell = row.insertCell(0);
                     const priceCell = row.insertCell(1);
                     nameCell.textContent = product;
-                    priceCell.textContent = parseFloat(latestPrices[product].price).toFixed(2); // Format price to 2 decimal places
+                    priceCell.textContent = parseFloat(latestPrices[product].price).toFixed(2);
                 }
             }
 
             const products = [...new Set(data.map(item => item.product))];
             const productFilter = document.getElementById('productFilter');
-            let priceChart; // Declare chart variable globally or in a scope accessible by updateChart
+            let priceChart;
 
-            // Populate the dropdown
             const allOption = document.createElement('option');
             allOption.value = 'all';
             allOption.textContent = 'All Products';
@@ -64,12 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 option.value = product;
                 option.textContent = product;
                 productFilter.appendChild(option);
-                if (index === 0) { // Select the first product by default
+                if (index === 0) {
                     option.selected = true;
                 }
             });
 
-            // Function to update the chart based on selected product
             function updateChart(selectedProduct = 'all') {
                 const filteredData = selectedProduct === 'all' ? data : data.filter(item => item.product === selectedProduct);
 
@@ -80,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     '#000075', '#808080'
                 ];
 
-                console.log('Filtered Data:', filteredData);
                 const currentProducts = [...new Set(filteredData.map(item => item.product))];
                 const datasets = currentProducts.map((product, index) => {
                     const productData = filteredData.filter(item => item.product === product)
@@ -91,13 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             x: luxon.DateTime.fromSQL(item.date).valueOf(),
                             y: parseFloat(item.price)
                         })),
-                        borderColor: colorPalette[index % colorPalette.length], // Cycle through the palette
+                        borderColor: colorPalette[index % colorPalette.length],
                         fill: false
                     };
                 });
-                console.log('Datasets:', datasets);
 
-                // Calculate min/max for Y-axis
                 const validPrices = filteredData.map(item => parseFloat(item.price)).filter(price => !isNaN(price) && price.toString().length <= 10);
                 let minPrice = 0;
                 let maxPrice = 1;
@@ -107,14 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     maxPrice = Math.max(...validPrices);
                 }
 
-                // Add a buffer for better visualization
-                let priceBuffer = (maxPrice - minPrice) * 0.1; // 10% buffer
+                let priceBuffer = (maxPrice - minPrice) * 0.1;
 
-                // Handle cases where minPrice and maxPrice are the same (constant price)
                 if (minPrice === maxPrice) {
-                    if (minPrice === 0) { // If price is 0, use a small positive buffer
+                    if (minPrice === 0) {
                         priceBuffer = 0.1;
-                    } else { // For non-zero constant prices, use a fixed buffer
+                    } else {
                         priceBuffer = 1;
                     }
                 }
@@ -133,13 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 text: 'Date'
                             },
                             time: {
-                            unit: 'day',
-                            stepSize: 1,
-                            tooltipFormat: 'MMM d, yyyy',
-                            displayFormats: {
-                                day: 'MMM d, yyyy'
+                                unit: 'day',
+                                stepSize: 1,
+                                tooltipFormat: 'MMM d, yyyy',
+                                displayFormats: {
+                                    day: 'MMM d, yyyy'
+                                }
                             }
-                        }
                         },
                         y: {
                             title: {
@@ -160,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (priceChart) {
                     priceChart.data.datasets = datasets;
-                    priceChart.options = chartOptions; // Update options
+                    priceChart.options = chartOptions;
                     priceChart.update();
                 } else {
                     const ctx = document.getElementById('priceChart').getContext('2d');
@@ -169,16 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         data: {
                             datasets: datasets
                         },
-                        options: chartOptions // Include options here
+                        options: chartOptions
                     });
                 }
             }
 
-            // Initial chart load: default to the first product
             const initialProduct = productFilter.value;
             updateChart(initialProduct);
 
-            // Add event listener for dropdown change
             productFilter.addEventListener('change', (event) => {
                 updateChart(event.target.value);
             });

@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '#000075', '#808080'
                 ];
 
+                console.log('Filtered Data:', filteredData);
                 const currentProducts = [...new Set(filteredData.map(item => item.product))];
                 const datasets = currentProducts.map((product, index) => {
                     const productData = filteredData.filter(item => item.product === product)
@@ -94,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         fill: false
                     };
                 });
+                console.log('Datasets:', datasets);
 
                 // Calculate min/max for Y-axis
                 const validPrices = filteredData.map(item => parseFloat(item.price)).filter(price => !isNaN(price) && price.toString().length <= 10);
@@ -132,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             },
                             time: {
                             unit: 'day',
-                            stepSize: 7,
+                            stepSize: 1,
                             tooltipFormat: 'MMM d, yyyy',
                             displayFormats: {
                                 day: 'MMM d, yyyy'

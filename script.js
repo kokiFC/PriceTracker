@@ -13,7 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const values = line.split(',');
                 const row = {};
                 headers.forEach((header, index) => {
-                    row[header.trim()] = values[index].trim();
+                    let value = values[index] ? values[index].trim() : '';
+                    if (header.trim() === 'product') {
+                        // Remove leading '#' from product name
+                        value = value.replace(/^#/, '');
+                    }
+                    if (header.trim() === 'price') {
+                        // Sanitize the price to keep only the initial numeric part
+                        const priceMatch = value.match(/^[0-9,.]+/);
+                        value = priceMatch ? priceMatch[0] : '0';
+                    }
+                    row[header.trim()] = value;
                 });
                 return row;
             });
@@ -37,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             function isValidPrice(price) {
                 const priceValue = parseFloat(price);
-                return !isNaN(priceValue) && priceValue.toString().length <= 10;
+                return !isNaN(priceValue);
             }
 
             for (const product in latestPrices) {
@@ -94,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 });
 
-                const validPrices = filteredData.map(item => parseFloat(item.price)).filter(price => !isNaN(price) && price.toString().length <= 10);
+                const validPrices = filteredData.map(item => parseFloat(item.price)).filter(price => !isNaN(price));
                 let minPrice = 0;
                 let maxPrice = 1;
 
